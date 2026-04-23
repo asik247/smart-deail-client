@@ -1,8 +1,11 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Link, NavLink } from 'react-router';
+import { AuthContext } from '../Context/AuthContext';
 
 const Navbar = () => {
     const [open, setOpen] = useState(false);
+    const { user,logOut } = useContext(AuthContext)
+    console.log('currentUser', user);
 
     const links = (
         <>
@@ -24,26 +27,38 @@ const Navbar = () => {
                 All Products
             </NavLink>
 
-            <NavLink
-                to="/myProducts"
-                className={({ isActive }) =>
-                    isActive ? "text-blue-500 font-semibold" : ""
-                }
-            >
-                My Products
-            </NavLink>
+            {
+                user && <>
+                    <NavLink
+                        to="/myProducts"
+                        className={({ isActive }) =>
+                            isActive ? "text-blue-500 font-semibold" : ""
+                        }
+                    >
+                        My Products
+                    </NavLink>
 
-            <NavLink
-                to="/myBids"
-                className={({ isActive }) =>
-                    isActive ? "text-blue-500 font-semibold" : ""
-                }
-            >
-                My Bids
-            </NavLink>
+                    <NavLink
+                        to="/myBids"
+                        className={({ isActive }) =>
+                            isActive ? "text-blue-500 font-semibold" : ""
+                        }
+                    >
+                        My Bids
+                    </NavLink>
+                </>
+            }
         </>
     );
-
+    const handleLogOut = ()=>{
+        console.log("logoUt");
+        logOut()
+        .then(()=>{
+            console.log("successfully logOut");
+        }).catch(error=>{
+            console.log(error.message);
+        })
+    }
     return (
         <nav className="bg-white shadow-md">
             <div className="max-w-7xl mx-auto px-5 py-4 flex justify-between items-center">
@@ -60,12 +75,16 @@ const Navbar = () => {
 
                 {/* Login Button */}
                 <div className="hidden md:block">
-                    <Link
-                        to="/auth"
-                        className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition"
-                    >
-                        Login
-                    </Link>
+                    {
+                        user ? <p  onClick={handleLogOut}>LogOut</p> : <Link
+                            to="/auth"
+                           
+                            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition"
+                        >
+                            Login
+                        </Link>
+                    }
+
                 </div>
 
                 {/* Mobile Menu Button */}

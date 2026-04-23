@@ -4,7 +4,7 @@ import { AuthContext } from '../Context/AuthContext';
 ;
 
 const Login = () => {
-    const {login} = useContext(AuthContext);
+    const { login, googleSingIn } = useContext(AuthContext);
 
     const handleLogin = (e) => {
         e.preventDefault();
@@ -14,17 +14,24 @@ const Login = () => {
         const password = form.password.value;
 
         console.log(email, password);
-        login(email,password)
-        .then(res=>{
-            console.log(res.user);
-        }).catch(error=>{
-            console.log(error);
-        })
+        login(email, password)
+            .then(res => {
+                console.log(res.user);
+            }).catch(error => {
+                console.log(error);
+            })
         // এখানে Firebase / backend login add করতে পারো
     };
 
     const handleGoogleLogin = () => {
         console.log("Google Login Clicked");
+        googleSingIn()
+            .then(res => {
+                console.log(res.user);
+            }).catch(error => {
+                console.log(error.message);
+            })
+
         // Firebase Google login later add করবো
     };
 
