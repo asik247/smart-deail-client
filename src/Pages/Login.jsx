@@ -27,7 +27,25 @@ const Login = () => {
         console.log("Google Login Clicked");
         googleSingIn()
             .then(res => {
-                console.log(res.user);
+                // console.log(res.user.displayName);
+                const userData = {
+                    name:res.user.displayName,
+                    email:res.user.email,
+                    photo:res.user.photoURL
+                }
+             
+                fetch('http://localhost:3000/users',{
+                    method:'POST',
+                    headers:{
+                        'content-type':'application/json'
+                    },
+                    body:JSON.stringify(userData)
+                    
+                })
+                .then(res=>res.json())
+                .then(data=>{
+                    console.log('after data datebase',data);
+                })
             }).catch(error => {
                 console.log(error.message);
             })
