@@ -26,6 +26,14 @@ const Navbar = () => {
             >
                 All Products
             </NavLink>
+            <NavLink
+                to="/dashboard"
+                className={({ isActive }) =>
+                    isActive ? "text-blue-500 font-semibold" : ""
+                }
+            >
+                Dashboard
+            </NavLink>
 
             {
                 user && <>

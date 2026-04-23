@@ -7,6 +7,8 @@ import AllProducts from "../Pages/AllProducts";
 import MyProducts from "../Pages/MyProducts";
 import MyBids from "../Pages/MyBids";
 import AuthLayouts from "../Layouts/AuthLayouts";
+import PrivateRoutes from "./PrivateRoutes";
+import DashBoard from "../Pages/DashBoard";
 
 const router = createBrowserRouter([
     {
@@ -16,7 +18,8 @@ const router = createBrowserRouter([
             { index: true, Component: Home },
             { path: 'allProducts', Component: AllProducts },
             { path: 'myProducts', Component: MyProducts },
-            { path: 'myBids', Component: MyBids },
+            { path: 'myBids',Component:MyBids },
+            { path: 'dashboard', element:<PrivateRoutes><DashBoard></DashBoard></PrivateRoutes> },
 
         ]
     },

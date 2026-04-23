@@ -1,11 +1,12 @@
 import React, { useContext } from 'react';
-import { Link } from 'react-router';
+import { Link, useLocation, useNavigate } from 'react-router';
 import { AuthContext } from '../Context/AuthContext';
 ;
 
 const Login = () => {
     const { login, googleSingIn } = useContext(AuthContext);
-
+    const navegate = useNavigate();
+    const location = useLocation();
     const handleLogin = (e) => {
         e.preventDefault();
 
@@ -27,6 +28,7 @@ const Login = () => {
         console.log("Google Login Clicked");
         googleSingIn()
             .then(res => {
+                navegate(location.state || '/')
                 // console.log(res.user.displayName);
                 const userData = {
                     name:res.user.displayName,
