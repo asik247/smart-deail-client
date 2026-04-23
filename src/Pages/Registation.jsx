@@ -1,17 +1,11 @@
-
 import { useContext } from 'react';
 import { Link } from 'react-router';
 import { AuthContext } from '../Context/AuthContext';
-
-
-
 const Registation = () => {
     const {registerUsers} = useContext(AuthContext)
     // console.log(userInfo);
-
     const handleRegister = (e) => {
         e.preventDefault();
-
         const form = e.target;
         // const name = form.name.value;
         // const photo = form.photo.value;

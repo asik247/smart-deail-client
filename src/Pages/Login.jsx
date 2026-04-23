@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Link } from 'react-router';
+import { AuthContext } from '../Context/AuthContext';
 ;
 
 const Login = () => {
+    const {login} = useContext(AuthContext);
 
     const handleLogin = (e) => {
         e.preventDefault();
@@ -12,6 +14,12 @@ const Login = () => {
         const password = form.password.value;
 
         console.log(email, password);
+        login(email,password)
+        .then(res=>{
+            console.log(res.user);
+        }).catch(error=>{
+            console.log(error);
+        })
         // এখানে Firebase / backend login add করতে পারো
     };
 
