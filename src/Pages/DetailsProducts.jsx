@@ -4,24 +4,7 @@ import { FaMapMarkerAlt, FaPhone, FaEnvelope, FaClock, FaTag } from 'react-icons
 import { AuthContext } from '../Context/AuthContext';
 
 const DetailsProducts = () => {
-    const product = useLoaderData();
-    //! load authProvider in user;
-    const {user} = use(AuthContext)
-    // Modal UseRef;
-    const modalRef = useRef(null)
-    const handleModal = () => {
-        modalRef.current.showModal()
-    }
-    const handleBidsSubmit = (e)=>{
-        e.preventDefault()
-        const name = e.target.name.value;
-        const email = e.target.email.value;
-        const bid = e.target.bid.value;
-        console.log(name,email,bid);
-    }
-
-    const {
-        title,
+    const { title,
         price_min,
         price_max,
         email,
@@ -35,8 +18,59 @@ const DetailsProducts = () => {
         condition,
         usage,
         description,
-        seller_contact,
-    } = product;
+        seller_contact,_id:productId} = useLoaderData();
+    //! load authProvider in user;
+    const {user} = use(AuthContext)
+    // Modal UseRef;
+    const modalRef = useRef(null)
+    const handleModal = () => {
+        modalRef.current.showModal()
+    }
+    const handleBidsSubmit = (e)=>{
+        e.preventDefault()
+        const name = e.target.name.value;
+        const email = e.target.email.value;
+        const bid = e.target.bid.value;
+        console.log(productId,name,email,bid);
+        const newBid = {
+            product:productId,
+            buyer_name:name,
+            buyer_email:email,
+            bid_price:bid,
+            status:'pending'
+        }
+        // console.log(newBid);
+        // ! Bids data post in database code hre;
+        fetch("http://localhost:3000/bids",{
+            method:'POST',
+            headers:{
+                'content-type':'application/json'
+            },
+            body:JSON.stringify(newBid)
+        })
+        .then(res=>res.json())
+        .then(data=>{
+            console.log('after placing bid in database',data);
+        })
+    }
+
+    // const {
+    //     title,
+    //     price_min,
+    //     price_max,
+    //     email,
+    //     category,
+    //     created_at,
+    //     image,
+    //     status,
+    //     location,
+    //     seller_image,
+    //     seller_name,
+    //     condition,
+    //     usage,
+    //     description,
+    //     seller_contact,
+    // } = product;
 
     const formattedDate = new Date(created_at).toLocaleDateString('en-BD', {
         year: 'numeric', month: 'long', day: 'numeric'
