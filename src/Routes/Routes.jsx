@@ -9,6 +9,7 @@ import MyBids from "../Pages/MyBids";
 import AuthLayouts from "../Layouts/AuthLayouts";
 import PrivateRoutes from "./PrivateRoutes";
 import DashBoard from "../Pages/DashBoard";
+import DetailsProducts from "../Pages/DetailsProducts";
 
 const router = createBrowserRouter([
     {
@@ -20,6 +21,9 @@ const router = createBrowserRouter([
             { path: 'myProducts', Component: MyProducts },
             { path: 'myBids',Component:MyBids },
             { path: 'dashboard', element:<PrivateRoutes><DashBoard></DashBoard></PrivateRoutes> },
+            {path:`detailsPages/:id`,
+            loader:({params})=>fetch(`http://localhost:3000/products/${params.id}`),
+            Component:DetailsProducts}
 
         ]
     },
