@@ -1,9 +1,114 @@
-import React from 'react';
+import React, { use, useEffect, useState } from 'react';
+import { AuthContext } from '../Context/AuthContext';
 
 const MyBids = () => {
+    const { user } = use(AuthContext)
+    const [bids, setBids] = useState([])
+
+    useEffect(() => {
+        if (user?.email) {
+            fetch(`http://localhost:3000/bids?email=${user.email}`)
+                .then(res => res.json())
+                .then(data => {
+                    setBids(data)
+                })
+        }
+    }, [user?.email])
+
+    // ✅ Delete Handler
+    const handleDelete = (id) => {
+        fetch(`http://localhost:3000/bids/${id}`, {
+            method: 'DELETE'
+        })
+            .then(res => res.json())
+            .then(data => {
+                if (data.deletedCount > 0) {
+                    const remaining = bids.filter(bid => bid._id !== id)
+                    setBids(remaining)
+                }
+            })
+    }
+
     return (
-        <div>
-            <p>My Bids</p>
+        <div className="p-5">
+            <h2 className="text-2xl font-bold mb-4">
+                My Bids ({bids.length})
+            </h2>
+
+            <div className="overflow-x-auto bg-base-100 shadow rounded-xl">
+                <table className="table">
+                    
+                    <thead className="bg-base-200">
+                        <tr>
+                            <th>#</th>
+                            <th>User</th>
+                            <th>Email</th>
+                            <th>Price</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {
+                            bids.map((bid, index) => (
+                                <tr key={bid._id} className="hover">
+                                    
+                                    {/* Serial */}
+                                    <td>{index + 1}</td>
+
+                                    {/* User Info */}
+                                    <td>
+                                        <div className="flex items-center gap-3">
+                                            <div className="avatar">
+                                                <div className="mask mask-squircle h-12 w-12">
+                                                    <img
+                                                        src={bid.buyer_img}
+                                                        alt="user"
+                                                    />
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <div className="font-bold">{bid.buyer_name}</div>
+                                            </div>
+                                        </div>
+                                    </td>
+
+                                    {/* Email */}
+                                    <td>{bid.buyer_email}</td>
+
+                                    {/* Price */}
+                                    <td className="font-semibold text-green-600">
+                                        {bid.bid_price} ৳
+                                    </td>
+
+                                    {/* Status */}
+                                    <td>
+                                        <span className={`badge 
+                                            ${bid.status === "pending" && "badge-warning"}
+                                            ${bid.status === "accepted" && "badge-success"}
+                                            ${bid.status === "rejected" && "badge-error"}
+                                        `}>
+                                            {bid.status}
+                                        </span>
+                                    </td>
+
+                                    {/* Action */}
+                                    <td>
+                                        <button
+                                            onClick={() => handleDelete(bid._id)}
+                                            className="btn btn-error btn-xs"
+                                        >
+                                            Delete
+                                        </button>
+                                    </td>
+
+                                </tr>
+                            ))
+                        }
+                    </tbody>
+                </table>
+            </div>
         </div>
     );
 };

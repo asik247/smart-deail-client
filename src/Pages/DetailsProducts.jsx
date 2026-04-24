@@ -49,7 +49,7 @@ const DetailsProducts = () => {
             product: productId,
             buyer_name: name,
             buyer_email: email,
-            // buyer_img: user,
+            buyer_image: user?.photoURL,
             bid_price: bid,
             status: 'pending'
         }
