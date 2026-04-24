@@ -1,9 +1,13 @@
-import React, { use, useRef } from 'react';
+import React, { use, useEffect, useRef, useState } from 'react';
 import { useLoaderData } from 'react-router';
 import { FaMapMarkerAlt, FaPhone, FaEnvelope, FaClock, FaTag } from 'react-icons/fa';
 import { AuthContext } from '../Context/AuthContext';
+import Swal from 'sweetalert2';
+
 
 const DetailsProducts = () => {
+    //? useStae for bids
+    const [bids, setBids] = useState([]);
     const { title,
         price_min,
         price_max,
@@ -17,41 +21,68 @@ const DetailsProducts = () => {
         seller_name,
         condition,
         usage,
-        description,
-        seller_contact,_id:productId} = useLoaderData();
+        
+        seller_contact, _id: productId } = useLoaderData();
+    //? useEffect bids data load;
+    useEffect(() => {
+        fetch(`http://localhost:3000/products/bids/${productId}`)
+            .then(res => res.json())
+            .then(data => {
+                console.log('bids data', data);
+                setBids(data)
+            })
+    }, [productId])
     //! load authProvider in user;
-    const {user} = use(AuthContext)
+    const { user } = use(AuthContext)
     // Modal UseRef;
     const modalRef = useRef(null)
     const handleModal = () => {
         modalRef.current.showModal()
     }
-    const handleBidsSubmit = (e)=>{
+    const handleBidsSubmit = (e) => {
         e.preventDefault()
         const name = e.target.name.value;
         const email = e.target.email.value;
         const bid = e.target.bid.value;
-        console.log(productId,name,email,bid);
+        console.log(productId, name, email, bid);
         const newBid = {
-            product:productId,
-            buyer_name:name,
-            buyer_email:email,
-            bid_price:bid,
-            status:'pending'
+            product: productId,
+            buyer_name: name,
+            buyer_email: email,
+            // buyer_img: user,
+            bid_price: bid,
+            status: 'pending'
         }
-        // console.log(newBid);
+        console.log(newBid);
         // ! Bids data post in database code hre;
-        fetch("http://localhost:3000/bids",{
-            method:'POST',
-            headers:{
-                'content-type':'application/json'
+        fetch("http://localhost:3000/bids", {
+            method: 'POST',
+            headers: {
+                'content-type': 'application/json'
             },
-            body:JSON.stringify(newBid)
+            body: JSON.stringify(newBid)
         })
-        .then(res=>res.json())
-        .then(data=>{
-            console.log('after placing bid in database',data);
-        })
+            .then(res => res.json())
+            .then(data => {
+                console.log('after placing bid in database', data);
+                //? cheack condition
+                if (data.insertedId) {
+                    modalRef.current.close()
+                    Swal.fire({
+                        position: "top-end",
+                        icon: "success",
+                        title: "Your work has been saved",
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                    //? add the new bid to the state;
+                    newBid._id = data.insertedId;
+                    const newBids = [...bids,newBid];
+                    newBids.sort((a,b)=>b.bid_price - a.bid_price)
+                    setBids(newBids)
+
+                }
+            })
     }
 
     // const {
@@ -170,20 +201,20 @@ const DetailsProducts = () => {
                                         <form onSubmit={handleBidsSubmit}>
                                             <fieldset className="fieldset">
                                                 <label className="label">Name</label>
-                                                <input type="text" 
-                                                className="input"
-                                                name='name' readOnly defaultValue={user.displayName} />
-                                              {/* Email Fieled */}
+                                                <input type="text"
+                                                    className="input"
+                                                    name='name' readOnly defaultValue={user?.displayName} />
+                                                {/* Email Fieled */}
                                                 <label className="label">Email</label>
-                                                <input type="email" className="input" name='email' readOnly defaultValue={user.email} />
+                                                <input type="email" className="input" name='email' readOnly defaultValue={user?.email} />
                                                 {/* Bids */}
                                                 <label className="label">Bid</label>
-                                                <input type="text" 
-                                                className="input" 
-                                                name='bid'
-                                                placeholder='Your Bids' />
+                                                <input type="text"
+                                                    className="input"
+                                                    name='bid'
+                                                    placeholder='Your Bids' />
 
-                                                
+
                                                 <button className="btn btn-neutral mt-4">Please your bid</button>
                                             </fieldset>
                                         </form>
@@ -220,10 +251,66 @@ const DetailsProducts = () => {
 
                 {/* Bottom — Description */}
                 <div className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm">
-                    <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-3">Description</p>
-                    <p className="text-gray-700 text-sm leading-relaxed">
-                        {description}
-                    </p>
+                    <h2>Bids for this Products <span className='text-primary'>{bids.length}</span></h2>
+                    {/* Table */}
+                    <div className="overflow-x-auto">
+                        <table className="table">
+                            <thead>
+                                <tr>
+                                    <th>S.No</th>
+                                    <th>Image</th>
+                                    <th>Email</th>
+                                    <th>Bid Price</th>
+                                    <th>Your Choice</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                {
+                                    bids.map((bid, index) => (
+                                        <tr key={bid._id}>
+
+                                            {/* Serial No */}
+                                            <td>{index + 1}</td>
+
+                                            {/* Image */}
+                                            <td>
+                                                <div className="avatar">
+                                                    <div className="mask mask-squircle h-12 w-12">
+                                                        <img src={bid.buyer_image} alt="user" />
+                                                    </div>
+                                                </div>
+                                            </td>
+
+                                            {/* Email */}
+                                            <td>{bid.buyer_email}</td>
+
+                                            {/* Bid Price */}
+                                            <td>{bid.bid_price} ৳</td>
+
+                                            {/* Your Choice */}
+                                            <td>
+                                                <button
+                                                   
+                                                    className="btn btn-success btn-xs mr-2"
+                                                >
+                                                    Accept
+                                                </button>
+
+                                                <button
+                                                  
+                                                    className="btn btn-error btn-xs"
+                                                >
+                                                    Reject
+                                                </button>
+                                            </td>
+
+                                        </tr>
+                                    ))
+                                }
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
 
             </div>

@@ -3,7 +3,7 @@ import Products from './Products';
 
 const LatestProducts = ({ fetchPromiseLatestProducts }) => {
     const productsLatest = use(fetchPromiseLatestProducts);
-    console.log(productsLatest);
+    // console.log(productsLatest);
     return (
         <div>
             <h2 className='text-2xl font-bold text-center mb-5'>Latst Product({productsLatest.length})</h2>
