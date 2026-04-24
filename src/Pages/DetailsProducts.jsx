@@ -1,13 +1,23 @@
-import React, { useRef } from 'react';
+import React, { use, useRef } from 'react';
 import { useLoaderData } from 'react-router';
 import { FaMapMarkerAlt, FaPhone, FaEnvelope, FaClock, FaTag } from 'react-icons/fa';
+import { AuthContext } from '../Context/AuthContext';
 
 const DetailsProducts = () => {
     const product = useLoaderData();
+    //! load authProvider in user;
+    const {user} = use(AuthContext)
     // Modal UseRef;
     const modalRef = useRef(null)
-    const handleModal = ()=>{
+    const handleModal = () => {
         modalRef.current.showModal()
+    }
+    const handleBidsSubmit = (e)=>{
+        e.preventDefault()
+        const name = e.target.name.value;
+        const email = e.target.email.value;
+        const bid = e.target.bid.value;
+        console.log(name,email,bid);
     }
 
     const {
@@ -116,12 +126,33 @@ const DetailsProducts = () => {
                                     🛒 I Want to Buy This Product
                                 </button>
                                 {/* Modal code */}
-                        
-                               
+
+
                                 <dialog ref={modalRef} className="modal">
                                     <div className="modal-box w-11/12 max-w-5xl">
-                                        <h3 className="font-bold text-lg">Hello!</h3>
-                                        <p className="py-4">Click the button below to close</p>
+                                        <h3 className="font-bold text-lg">Give the best offer!</h3>
+                                        <p className="py-4">Offer something seller can not resist</p>
+                                        {/* custom from */}
+                                        <form onSubmit={handleBidsSubmit}>
+                                            <fieldset className="fieldset">
+                                                <label className="label">Name</label>
+                                                <input type="text" 
+                                                className="input"
+                                                name='name' readOnly defaultValue={user.displayName} />
+                                              {/* Email Fieled */}
+                                                <label className="label">Email</label>
+                                                <input type="email" className="input" name='email' readOnly defaultValue={user.email} />
+                                                {/* Bids */}
+                                                <label className="label">Bid</label>
+                                                <input type="text" 
+                                                className="input" 
+                                                name='bid'
+                                                placeholder='Your Bids' />
+
+                                                
+                                                <button className="btn btn-neutral mt-4">Please your bid</button>
+                                            </fieldset>
+                                        </form>
                                         <div className="modal-action">
                                             <form method="dialog">
                                                 {/* if there is a button, it will close the modal */}
