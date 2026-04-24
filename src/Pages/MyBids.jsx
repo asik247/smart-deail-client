@@ -1,5 +1,6 @@
 import React, { use, useEffect, useState } from 'react';
 import { AuthContext } from '../Context/AuthContext';
+import Swal from 'sweetalert2';
 
 const MyBids = () => {
     const { user } = use(AuthContext)
@@ -17,16 +18,40 @@ const MyBids = () => {
 
     // ✅ Delete Handler
     const handleDelete = (id) => {
-        fetch(`http://localhost:3000/bids/${id}`, {
-            method: 'DELETE'
-        })
-            .then(res => res.json())
-            .then(data => {
-                if (data.deletedCount > 0) {
-                    const remaining = bids.filter(bid => bid._id !== id)
-                    setBids(remaining)
-                }
-            })
+
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, delete it!"
+        }).then((result) => {
+
+            if (result.isConfirmed) {
+
+                fetch(`http://localhost:3000/bids/${id}`, {
+                    method: 'DELETE'
+                })
+                    .then(res => res.json())
+                    .then(data => {
+
+                        if (data.deletedCount > 0) {
+
+                            Swal.fire({
+                                title: "Deleted!",
+                                text: "Your bid has been deleted.",
+                                icon: "success"
+                            });
+
+                            const remaining = bids.filter(bid => bid._id !== id)
+                            setBids(remaining)
+                        }
+                    })
+            }
+
+        });
     }
 
     return (
@@ -37,7 +62,7 @@ const MyBids = () => {
 
             <div className="overflow-x-auto bg-base-100 shadow rounded-xl">
                 <table className="table">
-                    
+
                     <thead className="bg-base-200">
                         <tr>
                             <th>#</th>
@@ -53,7 +78,7 @@ const MyBids = () => {
                         {
                             bids.map((bid, index) => (
                                 <tr key={bid._id} className="hover">
-                                    
+
                                     {/* Serial */}
                                     <td>{index + 1}</td>
 
