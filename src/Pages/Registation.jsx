@@ -1,20 +1,46 @@
 import { useContext } from 'react';
 import { Link } from 'react-router';
 import { AuthContext } from '../Context/AuthContext';
+import { updateProfile } from "firebase/auth";
 const Registation = () => {
-    const {registerUsers} = useContext(AuthContext)
+    const { registerUsers } = useContext(AuthContext)
     // console.log(userInfo);
     const handleRegister = (e) => {
         e.preventDefault();
         const form = e.target;
-        // const name = form.name.value;
-        // const photo = form.photo.value;
+        const name = form.name.value;
+        const photo = form.photo.value;
         const email = form.email.value;
         const password = form.password.value;
-        console.log(email,password);
-        registerUsers(email,password)
-        .then(res=>console.log(res.user))
-        .catch(error=>console.log(error.message))
+        console.log(email, password, name, photo);
+        registerUsers(email, password)
+            .then(res => {
+                // const registerUserInfo = {
+                //     name:res.user.displayName,
+                //     email:res.user.email,
+                //     photo:res.user.photoURL,
+                    
+                // }
+                const updateUsers = {
+                    displayName: name,
+                    photoURL: photo
+                }
+                updateProfile(res.user, updateUsers)
+                // fetch('http://localhost:3000/users',{
+                //     method:'POST',
+                //     headers:{
+                //         'content-type':'application/json'
+                //     },
+                //     body:JSON.stringify(registerUserInfo)
+
+                // })
+                .then(res=>res.json())
+                .then(data=>{
+                    console.log('after save db dataa',data);
+                })
+            }
+            )
+            .catch(error => console.log(error.message))
 
         // const user = { name, photo, email, password };
 
@@ -36,7 +62,7 @@ const Registation = () => {
                 <form onSubmit={handleRegister} className="space-y-4">
 
                     {/* Name */}
-                    {/* <div>
+                    <div>
                         <label className="block mb-1 font-medium">Name</label>
                         <input
                             type="text"
@@ -45,10 +71,10 @@ const Registation = () => {
                             required
                             className="w-full border px-4 py-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
                         />
-                    </div> */}
+                    </div>
 
                     {/* Photo URL */}
-                    {/* <div>
+                    <div>
                         <label className="block mb-1 font-medium">Photo URL</label>
                         <input
                             type="text"
@@ -56,7 +82,7 @@ const Registation = () => {
                             placeholder="Enter photo URL"
                             className="w-full border px-4 py-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
                         />
-                    </div> */}
+                    </div>
 
                     {/* Email */}
                     <div>

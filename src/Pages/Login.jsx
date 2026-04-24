@@ -18,6 +18,7 @@ const Login = () => {
         login(email, password)
             .then(res => {
                 console.log(res.user);
+                
             }).catch(error => {
                 console.log(error);
             })
