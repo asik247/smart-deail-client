@@ -19,7 +19,7 @@ const router = createBrowserRouter([
             { index: true, Component: Home },
             { path: 'allProducts', Component: AllProducts },
             { path: 'myProducts', Component: MyProducts },
-            { path: 'myBids',Component:MyBids },
+            { path: 'myBids',element:<PrivateRoutes><MyBids></MyBids></PrivateRoutes> },
             { path: 'dashboard', element:<PrivateRoutes><DashBoard></DashBoard></PrivateRoutes> },
             {path:`detailsPages/:id`,
             loader:({params})=>fetch(`http://localhost:3000/products/${params.id}`),

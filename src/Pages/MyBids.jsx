@@ -3,20 +3,31 @@ import { AuthContext } from '../Context/AuthContext';
 import Swal from 'sweetalert2';
 
 const MyBids = () => {
-    const { user } = use(AuthContext)
+    const { user, loading } = use(AuthContext)
     const [bids, setBids] = useState([])
-
+    //?Token;
+    // console.log('AccessToken',user.accessToken);
+    // if (loading) {
+    //     return <div className="text-center mt-10">
+    //         <span className="loading loading-spinner loading-lg"></span>
+    //     </div>;
+    // }
     useEffect(() => {
         if (user?.email) {
-            fetch(`http://localhost:3000/bids?email=${user.email}`)
+            fetch(`http://localhost:3000/bids?email=${user.email}`, {
+                headers: {
+                    authorization: `Bearer ${user.accessToken}`
+                }
+                // ! send accessToken in server side;
+            })
                 .then(res => res.json())
                 .then(data => {
                     setBids(data)
                 })
         }
-    }, [user?.email])
+    }, [user?.email,user?.accessToken])
 
-    // ✅ Delete Handler
+    //? Delete my bids code here;
     const handleDelete = (id) => {
 
         Swal.fire({
@@ -53,6 +64,8 @@ const MyBids = () => {
 
         });
     }
+
+
 
     return (
         <div className="p-5">
