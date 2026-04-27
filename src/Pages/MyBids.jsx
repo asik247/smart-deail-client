@@ -3,15 +3,10 @@ import { AuthContext } from '../Context/AuthContext';
 import Swal from 'sweetalert2';
 
 const MyBids = () => {
-    const { user, loading } = use(AuthContext)
+    const { user } = use(AuthContext)
     const [bids, setBids] = useState([])
     //?Token;
-    // console.log('AccessToken',user.accessToken);
-    // if (loading) {
-    //     return <div className="text-center mt-10">
-    //         <span className="loading loading-spinner loading-lg"></span>
-    //     </div>;
-    // }
+    console.log('AccessToken',user.accessToken);
     useEffect(() => {
         if (user?.email) {
             fetch(`http://localhost:3000/bids?email=${user.email}`, {

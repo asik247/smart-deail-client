@@ -2,7 +2,8 @@ import React, { use } from 'react';
 import { AuthContext } from '../Context/AuthContext';
 
 const DashBoard = () => {
-    const {loading} = use(AuthContext)
+    const {loading,user} = use(AuthContext)
+    console.log('dashboar current user:',user);
     // if(loading){
     //     return <p>loadgin...</p>
     // }
