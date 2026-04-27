@@ -5,6 +5,7 @@ import { AuthContext } from '../Context/AuthContext';
 
 const Login = () => {
     const { login, googleSingIn } = useContext(AuthContext);
+    
     const navegate = useNavigate();
     const location = useLocation();
     const handleLogin = (e) => {
@@ -26,7 +27,7 @@ const Login = () => {
     };
 
     const handleGoogleLogin = () => {
-        console.log("Google Login Clicked");
+        // console.log("Google Login Clicked");
         googleSingIn()
             .then(res => {
                 navegate(location.state || '/')

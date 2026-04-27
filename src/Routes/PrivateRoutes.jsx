@@ -6,7 +6,7 @@ import { SyncLoader } from 'react-spinners';
 const PrivateRoutes = ({children}) => {
     const {user,loading} = useContext(AuthContext)
     const location = useLocation();
-    console.log(location);
+    // console.log(location);
     if(loading){
         return <SyncLoader />
     }

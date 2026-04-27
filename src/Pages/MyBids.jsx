@@ -6,14 +6,14 @@ const MyBids = () => {
     const { user } = use(AuthContext)
     const [bids, setBids] = useState([])
     //?Token;
-    console.log('AccessToken',user.accessToken);
+    // console.log('AccessToken',user.accessToken);
     useEffect(() => {
         if (user?.email) {
             fetch(`http://localhost:3000/bids?email=${user.email}`, {
-                headers: {
-                    authorization: `Bearer ${user.accessToken}`
-                }
                 // ! send accessToken in server side;
+                headers:{
+                    authorization:`Bearer ${user.accessToken}`
+                }
             })
                 .then(res => res.json())
                 .then(data => {
@@ -96,7 +96,7 @@ const MyBids = () => {
                                             <div className="avatar">
                                                 <div className="mask mask-squircle h-12 w-12">
                                                     <img
-                                                        src={bid.buyer_img}
+                                                        src={bid?.buyer_img}
                                                         alt="user"
                                                     />
                                                 </div>

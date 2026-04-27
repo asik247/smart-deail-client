@@ -5,7 +5,7 @@ import { AuthContext } from '../Context/AuthContext';
 const Navbar = () => {
     const [open, setOpen] = useState(false);
     const { user,logOut } = useContext(AuthContext)
-    console.log('currentUser', user);
+    // console.log('currentUser', user);
 
     const links = (
         <>
@@ -59,7 +59,7 @@ const Navbar = () => {
         </>
     );
     const handleLogOut = ()=>{
-        console.log("logoUt");
+        // console.log("logoUt");
         logOut()
         .then(()=>{
             console.log("successfully logOut");
