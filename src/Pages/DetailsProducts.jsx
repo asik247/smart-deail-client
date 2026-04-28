@@ -29,7 +29,7 @@ const DetailsProducts = () => {
             .then(res => res.json())
             .then(data => {
                 console.log('bids data', data);
-                setBids(data)
+                // setBids(data)
             })
     }, [productId])
     //! load authProvider in user;

@@ -147,3 +147,4 @@ const MyBids = () => {
 };
 
 export default MyBids;
+//sokel  code stat heobe
