@@ -10,17 +10,18 @@ const MyBids = () => {
     useEffect(() => {
         if (user?.email) {
             fetch(`http://localhost:3000/bids?email=${user.email}`, {
-                // ! send accessToken in server side✅;
-                headers:{
-                    authorization:`Bearer ${user.accessToken}`
+                // ! send accessToken in server side;
+                headers: {
+                    authorization: `Bearer ${user.accessToken}`
                 }
             })
                 .then(res => res.json())
                 .then(data => {
                     setBids(data)
+
                 })
         }
-    }, [user?.email,user?.accessToken])
+    }, [user?.email, user?.accessToken])
 
     //? Delete my bids code here;
     const handleDelete = (id) => {
@@ -147,4 +148,3 @@ const MyBids = () => {
 };
 
 export default MyBids;
-//sokel  code stat heobe

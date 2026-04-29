@@ -32,6 +32,7 @@ const Login = () => {
             .then(res => {
                 navegate(location.state || '/')
                 // console.log(res.user.displayName);
+                console.log(res.user);
                 const userData = {
                     name:res.user.displayName,
                     email:res.user.email,

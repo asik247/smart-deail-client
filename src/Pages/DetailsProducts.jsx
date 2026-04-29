@@ -28,8 +28,8 @@ const DetailsProducts = () => {
         fetch(`http://localhost:3000/products/bids/${productId}`)
             .then(res => res.json())
             .then(data => {
-                console.log('bids data', data);
-                // setBids(data)
+                // console.log('bids data', data);
+                setBids(data)
             })
     }, [productId])
     //! load authProvider in user;
