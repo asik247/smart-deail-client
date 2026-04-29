@@ -6,6 +6,7 @@ import Swal from 'sweetalert2';
 
 
 const DetailsProducts = () => {
+    const { user } = use(AuthContext)
     //? useStae for bids
     const [bids, setBids] = useState([]);
     const { title,
@@ -21,19 +22,23 @@ const DetailsProducts = () => {
         seller_name,
         condition,
         usage,
-        
+
         seller_contact, _id: productId } = useLoaderData();
     //? useEffect bids data load;
     useEffect(() => {
-        fetch(`http://localhost:3000/products/bids/${productId}`)
+        fetch(`http://localhost:3000/products/bids/${productId}`, {
+            headers: {
+                authorization: `Bearer ${user.accessToken}`
+            }
+        })
             .then(res => res.json())
             .then(data => {
                 // console.log('bids data', data);
                 setBids(data)
             })
-    }, [productId])
+    }, [productId,user])
     //! load authProvider in user;
-    const { user } = use(AuthContext)
+    console.log(user.accessToken);
     // Modal UseRef;
     const modalRef = useRef(null)
     const handleModal = () => {
@@ -77,8 +82,8 @@ const DetailsProducts = () => {
                     });
                     //? add the new bid to the state;
                     newBid._id = data.insertedId;
-                    const newBids = [...bids,newBid];
-                    newBids.sort((a,b)=>b.bid_price - a.bid_price)
+                    const newBids = [...bids, newBid];
+                    newBids.sort((a, b) => b.bid_price - a.bid_price)
                     setBids(newBids)
 
                 }
@@ -291,14 +296,14 @@ const DetailsProducts = () => {
                                             {/* Your Choice */}
                                             <td>
                                                 <button
-                                                   
+
                                                     className="btn btn-success btn-xs mr-2"
                                                 >
                                                     Accept
                                                 </button>
 
                                                 <button
-                                                  
+
                                                     className="btn btn-error btn-xs"
                                                 >
                                                     Reject

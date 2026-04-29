@@ -23,7 +23,7 @@ const router = createBrowserRouter([
             { path: 'dashboard', element:<PrivateRoutes><DashBoard></DashBoard></PrivateRoutes> },
             {path:`detailsPages/:id`,
             loader:({params})=>fetch(`http://localhost:3000/products/${params.id}`),
-            Component:DetailsProducts}
+            element:<PrivateRoutes><DetailsProducts></DetailsProducts></PrivateRoutes>}
 
         ]
     },
