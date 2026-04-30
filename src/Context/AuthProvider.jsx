@@ -23,13 +23,33 @@ const AuthProvider = ({ children }) => {
         return signInWithPopup(auth, provider)
     }
     //TODO: LogOut code hre;
-    const logOut = ()=>{
+    const logOut = () => {
         return signOut(auth)
     }
     //? OnAuthStateChange code here;
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (currentUsers) => {
             setUser(currentUsers)
+            if (currentUsers) {
+                const loggedEmail = {
+                    email: currentUsers.email
+                }
+                fetch('http://localhost:3000/getToken', {
+                    method: 'POST',
+                    headers: {
+                        'content-type': 'application/json'
+                    },
+                    body: JSON.stringify(loggedEmail)
+                })
+                    .then(res => res.json())
+                    .then(data => {
+                        console.log('after token', data);
+                        localStorage.setItem('token',data.token)
+                    })
+            }
+            else{
+                localStorage.removeItem('token')
+            }
             setLoading(false)
         })
         return () => unsubscribe()

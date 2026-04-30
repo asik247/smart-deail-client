@@ -11,7 +11,9 @@ const MyBids = () => {
         if (user?.email) {
             fetch(`http://localhost:3000/bids?email=${user.email}`, {
                 // ! send accessToken in server side;
-               
+                headers: {
+                    authorization: `Bearer ${localStorage.getItem('token')}`
+                }
             })
                 .then(res => res.json())
                 .then(data => {
