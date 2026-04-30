@@ -27,14 +27,16 @@ const DetailsProducts = () => {
     //? useEffect bids data load;
     useEffect(() => {
         fetch(`http://localhost:3000/products/bids/${productId}`, {
-           
+            headers: {
+                authorization: `Bearer ${localStorage.getItem('token')}`
+            }
         })
             .then(res => res.json())
             .then(data => {
                 // console.log('bids data', data);
                 setBids(data)
             })
-    }, [productId,user])
+    }, [productId, user])
     //! load authProvider in user;
     // console.log(user.accessToken);
     // Modal UseRef;
