@@ -52,6 +52,7 @@ const useAxiosSecure = () => {
                 return Promise.reject(error);
             }
         );
+       
 
         //! cleanup interceptor
         return () => {

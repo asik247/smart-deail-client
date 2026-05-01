@@ -1,27 +1,34 @@
 import React, { use, useEffect, useState } from 'react';
 import { AuthContext } from '../Context/AuthContext';
 import Swal from 'sweetalert2';
+import useAxiosSecure from '../Hooks/useAxiosSecure';
+import { data } from 'react-router';
 
 const MyBids = () => {
     const { user } = use(AuthContext)
     const [bids, setBids] = useState([])
+    const instanceSecure = useAxiosSecure()
     //?Token;
     // console.log('AccessToken',user.accessToken);
     useEffect(() => {
-        if (user?.email) {
-            fetch(`http://localhost:3000/bids?email=${user.email}`, {
-                // ! send accessToken in server side;
-                headers: {
-                    authorization: `Bearer ${localStorage.getItem('token')}`
-                }
-            })
-                .then(res => res.json())
-                .then(data => {
-                    setBids(data)
+        // if (user?.email) {
+        //     fetch(`http://localhost:3000/bids?email=${user.email}`, {
+        //         // ! send accessToken in server side;
+        //         headers: {
+        //             authorization: `Bearer ${localStorage.getItem('token')}`
+        //         }
+        //     })
+        //         .then(res => res.json())
+        //         .then(data => {
+        //             setBids(data)
 
-                })
-        }
-    }, [user?.email, user?.accessToken])
+        //         })
+        // }
+        instanceSecure.get(`/bids?email=${user.email}`)
+            .then(data => {
+                setBids(data.data)
+            })
+    }, [user, instanceSecure])
 
     //? Delete my bids code here;
     const handleDelete = (id) => {
