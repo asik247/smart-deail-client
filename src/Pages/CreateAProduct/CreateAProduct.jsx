@@ -1,10 +1,14 @@
 import React from 'react';
 import useFormSubmit from '../../Hooks/useFormSubmit';
 import useAuth from '../../Hooks/useAuth';
+import useAxiosInstance from '../../Hooks/useAxiosInstance';
+import { data } from 'react-router';
 
 const CreateAProduct = () => {
     //? user get using useAuth custom hook;
     const {user} = useAuth();
+    //!instance import;
+    const instance = useAxiosInstance()
     //Todo:All Input Field State and Handler using custom hook name useFormSubmit;
     const [nameValue, handleNameChange] = useFormSubmit('')
     const [imageValue, handleImageChange] = useFormSubmit('')
@@ -17,6 +21,11 @@ const CreateAProduct = () => {
         e.preventDefault();
         // ! new obj create/createNewProduct;
          const creatNewProduct = { nameValue, imageValue, minimumValue, maximumValue, numberValue, descriptionValue, email: user.email, seller_name: user.displayName };
+         //Todo:data post in server site product api;
+         instance.post('/products',creatNewProduct)
+         .then(data=>{
+            console.log('after data set db',data.data);
+         })
 
     }
     return (
