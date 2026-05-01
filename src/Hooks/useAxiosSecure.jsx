@@ -9,7 +9,6 @@ const useAxiosSecure = () => {
     //?Add a request interceptor;
     instanceSecure.interceptors.request.use((config) => {
         //? headers:authorization set;
-        // console.log('config:-', config);
         config.headers.authorization = `Bearer ${user.accessToken}`
         return config;
     })
