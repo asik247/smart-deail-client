@@ -10,6 +10,7 @@ import AuthLayouts from "../Layouts/AuthLayouts";
 import PrivateRoutes from "./PrivateRoutes";
 import DashBoard from "../Pages/DashBoard";
 import DetailsProducts from "../Pages/DetailsProducts";
+import CreateAProduct from "../Pages/CreateAProduct/CreateAProduct";
 
 const router = createBrowserRouter([
     {
@@ -23,7 +24,12 @@ const router = createBrowserRouter([
             { path: 'dashboard', element:<PrivateRoutes><DashBoard></DashBoard></PrivateRoutes> },
             {path:`detailsPages/:id`,
             loader:({params})=>fetch(`http://localhost:3000/products/${params.id}`),
-            element:<PrivateRoutes><DetailsProducts></DetailsProducts></PrivateRoutes>}
+            element:<PrivateRoutes><DetailsProducts></DetailsProducts></PrivateRoutes>},
+            {
+                path:'createAProduct',
+                element:<PrivateRoutes><CreateAProduct></CreateAProduct></PrivateRoutes>
+            }
+
 
         ]
     },

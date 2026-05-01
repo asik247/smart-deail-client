@@ -54,6 +54,15 @@ const Navbar = () => {
                     >
                         My Bids
                     </NavLink>
+                    {/* Create A Product */}
+                    <NavLink
+                        to="/createAProduct"
+                        className={({ isActive }) =>
+                            isActive ? "text-blue-500 font-semibold" : ""
+                        }
+                    >
+                       Create A Product
+                    </NavLink>
                 </>
             }
         </>
