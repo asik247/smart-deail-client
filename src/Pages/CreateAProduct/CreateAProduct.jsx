@@ -1,7 +1,10 @@
 import React from 'react';
 import useFormSubmit from '../../Hooks/useFormSubmit';
+import useAuth from '../../Hooks/useAuth';
 
 const CreateAProduct = () => {
+    //? user get using useAuth custom hook;
+    const {user} = useAuth();
     //Todo:All Input Field State and Handler using custom hook name useFormSubmit;
     const [nameValue, handleNameChange] = useFormSubmit('')
     const [imageValue, handleImageChange] = useFormSubmit('')
@@ -12,8 +15,8 @@ const CreateAProduct = () => {
     //Todo:HandlerCreaetAProduct sumbit form;
     const handleCreateAProduct = e => {
         e.preventDefault();
-        console.log('Yes Click Create A Proudcts');
-        // const creatNewProduct = { nameValue, imageValue, minimumValue, maximumValue, numberValue, descriptionValue, email: user.email, seller_name: user.displayName };
+        // ! new obj create/createNewProduct;
+         const creatNewProduct = { nameValue, imageValue, minimumValue, maximumValue, numberValue, descriptionValue, email: user.email, seller_name: user.displayName };
 
     }
     return (
