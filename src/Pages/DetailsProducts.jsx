@@ -3,10 +3,12 @@ import { useLoaderData } from 'react-router';
 import { FaMapMarkerAlt, FaPhone, FaEnvelope, FaClock, FaTag } from 'react-icons/fa';
 import { AuthContext } from '../Context/AuthContext';
 import Swal from 'sweetalert2';
+import useAxiosSecure from '../Hooks/useAxiosSecure';
 
 
 const DetailsProducts = () => {
     const { user } = use(AuthContext)
+    const instanceSecure = useAxiosSecure()
     //? useStae for bids
     const [bids, setBids] = useState([]);
     const { title,
@@ -26,17 +28,10 @@ const DetailsProducts = () => {
         seller_contact, _id: productId } = useLoaderData();
     //? useEffect bids data load;
     useEffect(() => {
-        fetch(`http://localhost:3000/products/bids/${productId}`, {
-            headers: {
-                authorization: `Bearer ${localStorage.getItem('token')}`
-            }
-        })
-            .then(res => res.json())
-            .then(data => {
-                // console.log('bids data', data);
-                setBids(data)
-            })
-    }, [productId, user])
+        instanceSecure(`/products/bids/${productId}`)
+            .then(data => setBids(data.data))
+    }, [instanceSecure,productId])
+
     //! load authProvider in user;
     // console.log(user.accessToken);
     // Modal UseRef;
